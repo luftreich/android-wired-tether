@@ -1,0 +1,11 @@
+no-resolv
+no-poll
+server=208.67.222.222
+server=208.67.220.220
+interface=usb0
+dhcp-authoritative 
+dhcp-range=192.168.2.100,192.168.2.105,12h
+dhcp-leasefile=/data/data/android.tether.usb/var/dnsmasq.leases
+pid-file=/data/data/android.tether.usb/var/dnsmasq.pid
+user=root
+no-negcache

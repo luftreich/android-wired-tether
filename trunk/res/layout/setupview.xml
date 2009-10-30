@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen  
+    xmlns:android="http://schemas.android.com/apk/res/android">  
+	<PreferenceCategory android:title="LAN">
+		<ListPreference  
+			android:key="lannetworkpref"  
+			android:title="Change LAN"  
+			android:summary="LAN network settings"  
+			android:entries="@array/lannetworkvalues"  
+			android:entryValues="@array/lannetworkvalues"  
+			android:dialogTitle="Select LAN-Network"
+			android:defaultValue="192.168.2.0/24" /> 	
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Notifications">
+		 <RingtonePreference  
+			android:key="notifyring"  
+			android:title="Notification Ringtone"  
+			android:showSilent="true"
+			android:showDefault="true"
+			android:ringtoneType="notification"
+			android:summary="Ringtone to use with notifications" /> 		
+		 <CheckBoxPreference  
+			android:key="notifyvibrate"  
+			android:title="Vibrate on connect"  
+			android:defaultValue="true"
+			android:summary="Vibrate when a client connects" /> 	
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Miscellaneous">
+		 <CheckBoxPreference  
+			android:key="updatepref"  
+			android:title="Disable Update-Check"  
+			android:summary="Turn off update-check at startup" /> 	
+		 <CheckBoxPreference  
+			android:key="wakelockpref"  
+			android:title="Disable Wake-Lock"  
+			android:summary="Turn off wake-lock while tethering" />  			 
+	</PreferenceCategory>
+</PreferenceScreen>  
