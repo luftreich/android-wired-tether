@@ -92,8 +92,8 @@ public class TetherApplication extends Application {
 	ArrayList<String> clientMacRemoveList = new ArrayList<String>();	
 	
 	// Update Url
-	private static final String APPLICATION_PROPERTIES_URL = "http://android-wifi-tether.googlecode.com/svn/download/update/samsung/galaxy/application.properties";
-	private static final String APPLICATION_DOWNLOAD_URL = "http://android-wifi-tether.googlecode.com/files/";
+	private static final String APPLICATION_PROPERTIES_URL = "http://android-wired-tether.googlecode.com/svn/download/update/htc/all/application.properties";
+	private static final String APPLICATION_DOWNLOAD_URL = "http://android-wired-tether.googlecode.com/files/";
 	
 	@Override
 	public void onCreate() {
