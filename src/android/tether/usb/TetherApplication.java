@@ -146,7 +146,9 @@ public class TetherApplication extends Application {
         	// Go ahead even if there is no active mobile-network
         	 return 1;
         }*/
-
+    	// Reset Client-Connect-Mac
+    	this.connectedMac = null;
+    	
         // Updating dnsmasq-Config
         this.coretask.updateDnsmasqConf();        
         
