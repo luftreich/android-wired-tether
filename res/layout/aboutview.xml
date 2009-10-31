@@ -32,7 +32,7 @@
 				android:paddingLeft="15px"
 				android:textStyle="bold"
 				android:textColor="#ffffff" />
-			<TextView android:text="http://android-wifi-tether.googlecode.com"
+			<TextView android:text="http://android-wired-tether.googlecode.com"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:autoLink="web"
