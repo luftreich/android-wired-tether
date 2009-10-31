@@ -94,8 +94,6 @@ public class MainActivity extends Activity {
         // Init Table-Rows
         this.startTblRow = (TableRow)findViewById(R.id.startRow);
         this.stopTblRow = (TableRow)findViewById(R.id.stopRow);
-        //this.radioModeLabel = (TextView)findViewById(R.id.radioModeText);
-        //this.radioModeImage = (ImageView)findViewById(R.id.radioModeImage);
         this.progressBar = (ProgressBar)findViewById(R.id.progressBar);
         this.progressText = (TextView)findViewById(R.id.progressText);
         this.progressTitle = (TextView)findViewById(R.id.progressTitle);
