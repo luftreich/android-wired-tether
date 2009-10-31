@@ -4,9 +4,8 @@
     <string name="setuptext">Setup</string>
     <string name="abouttext">About</string>
     <string name="logtext">Show Log</string>
-    <string name="applywhitelisttext">Apply Settings</string>
     <string name="installtext">(Re)-Install binaries/configs</string>
-	<string name="paypalUrl">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=4146444</string>
+	<string name="paypalUrl">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=9328763</string>
     <string-array name="lannetworkvalues">  
 		<item>192.168.1.0/24</item>  
 		<item>192.168.2.0/24</item> 

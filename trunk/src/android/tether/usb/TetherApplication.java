@@ -31,8 +31,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -66,9 +64,6 @@ public class TetherApplication extends Application {
 	private PowerManager powerManager = null;
 	private PowerManager.WakeLock wakeLock = null;
 
-	// ConnectivityManager
-	private ConnectivityManager connectivityManager;	
-	
 	// Preferences
 	public SharedPreferences settings = null;
 	public SharedPreferences.Editor preferenceEditor = null;
@@ -76,7 +71,6 @@ public class TetherApplication extends Application {
     // Notification
 	public NotificationManager notificationManager;
 	private Notification notification;
-	private int clientNotificationCount = 0;
 	
 	// Intents
 	private PendingIntent mainIntent;
@@ -87,12 +81,12 @@ public class TetherApplication extends Application {
 	// WebserviceTask
 	public WebserviceTask webserviceTask = null;
 	
-	// Client
-	ArrayList<ClientData> clientDataAddList = new ArrayList<ClientData>();
-	ArrayList<String> clientMacRemoveList = new ArrayList<String>();	
+	// Client notification
+	Notification clientConnectNotification =  null;
+	String connectedMac = null;
 	
 	// Update Url
-	private static final String APPLICATION_PROPERTIES_URL = "http://android-wired-tether.googlecode.com/svn/download/update/htc/all/application.properties";
+	private static final String APPLICATION_PROPERTIES_URL = "http://android-wired-tether.googlecode.com/svn/download/update/all/application.properties";
 	private static final String APPLICATION_DOWNLOAD_URL = "http://android-wired-tether.googlecode.com/files/";
 	
 	@Override
@@ -119,14 +113,14 @@ public class TetherApplication extends Application {
         // Powermanagement
         powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "TETHER_WAKE_LOCK");
-
-        // Connectivitymanager
-        connectivityManager = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);        
 		
         // init notificationManager
         this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
     	this.notification = new Notification(R.drawable.start_notification, "Wired Tether", System.currentTimeMillis());
     	this.mainIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+    	
+    	// Client notification
+ 	   	this.clientConnectNotification = new Notification(R.drawable.connected, "Wired Tether", 0);
 	}
 
 	@Override
@@ -138,15 +132,6 @@ public class TetherApplication extends Application {
 		this.notificationManager.cancelAll();
 	}
 
-	// ClientDataList Add
-	public synchronized void addClientData(ClientData clientData) {
-		this.clientDataAddList.add(clientData);
-	}
-
-	public synchronized void removeClientMac(String mac) {
-		this.clientMacRemoveList.add(mac);
-	}	
-	
 	// Start/Stop Tethering
     public int startTether() {
     	/*
@@ -155,10 +140,12 @@ public class TetherApplication extends Application {
     	 *    1 = Mobile-Data-Connection not established (not used at the moment)
     	 *    2 = Fatal error 
     	 */
-    	boolean connected = this.mobileNetworkActivated();
+    	
+    	/*boolean connected = this.mobileNetworkActivated();
         if (connected == false) {
-        	return 1;
-        }
+        	// Go ahead even if there is no active mobile-network
+        	 return 1;
+        }*/
 
         // Updating dnsmasq-Config
         this.coretask.updateDnsmasqConf();        
@@ -236,33 +223,6 @@ public class TetherApplication extends Application {
     	return true;
     }
     
-    private boolean mobileNetworkActivated() {
-    	boolean connected = false;
-    	int checkcounter = 0;
-    	Log.d(MSG_TAG, "Check for mobile-data-connection!");
-    	while (connected == false && checkcounter <= 5) {
-    		Log.d(MSG_TAG, "Waiting until connection is established ...");
-    		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-	        if (networkInfo != null) {
-		    	if (networkInfo != null && networkInfo.getState().equals(NetworkInfo.State.CONNECTED) == true) {
-		    		connected = true;
-		    	}
-	        }
-	        if (connected == false) {
-		    	checkcounter++;
-	        	try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// nothing
-				}
-	        }
-	        else {
-	        	break;
-	        }
-    	}
-    	return connected;
-    }
-    
     // gets user preference on whether wakelock should be disabled during tethering
     public boolean isWakeLockDisabled(){
 		return this.settings.getBoolean("wakelockpref", false);
@@ -317,18 +277,22 @@ public class TetherApplication extends Application {
     	this.notificationManager.notify(-1, this.notification);
     }
     
-    
+    int clientConnectCount = 0;
     Handler clientConnectHandler = new Handler() {
  	   public void handleMessage(Message msg) {
- 		    ClientData clientData = (ClientData)msg.obj;
- 		   TetherApplication.this.showClientConnectNotification(clientData);
+ 		   
+ 		   TetherApplication.this.clientConnectCount++;
+ 		   TetherApplication.this.displayToastMessage("clientConnec ==> "+TetherApplication.this.clientConnectCount);
+ 		   ClientData clientData = (ClientData)msg.obj;
+ 		   if (TetherApplication.this.connectedMac == null || TetherApplication.this.connectedMac.equals(clientData.getMacAddress()) == false) {
+ 			   TetherApplication.this.connectedMac = clientData.getMacAddress();
+ 			   TetherApplication.this.showClientConnectNotification(clientData);
+ 		   }
  	   }
     };
     
     public void showClientConnectNotification(ClientData clientData) {
-    	int notificationIcon = R.drawable.connected;
 		Log.d(MSG_TAG, "New client connected ==> "+clientData.getClientName()+" - "+clientData.getMacAddress());
- 	   	Notification clientConnectNotification = new Notification(notificationIcon, "Wired Tether", System.currentTimeMillis());
  	   	clientConnectNotification.tickerText = clientData.getClientName()+" ("+clientData.getMacAddress()+")";
  	   	if (!this.settings.getString("notifyring", "").equals(""))
  	   		clientConnectNotification.sound = Uri.parse(this.settings.getString("notifyring", ""));
@@ -338,21 +302,10 @@ public class TetherApplication extends Application {
 
  	   	clientConnectNotification.setLatestEventInfo(this, "Wired Tether", clientData.getClientName()+" ("+clientData.getMacAddress()+") connected ...", this.mainIntent);
  	   	clientConnectNotification.flags = Notification.FLAG_AUTO_CANCEL;
- 	   	this.notificationManager.notify(this.clientNotificationCount, clientConnectNotification);
- 	   	this.clientNotificationCount++;
+ 	   	this.notificationManager.notify(1, clientConnectNotification);
     } 
     
     public void recoverConfig() {
-
-    	// Updating wifi.conf
-    	Hashtable<String,String> values = new Hashtable<String,String>();
-    	// SSID
-    	values.put("ssid", this.settings.getString("ssidpref", "GalaxyTether"));
-    	// Channel
-    	values.put("channel", this.settings.getString("channelpref", "6"));
-    	// writing wlan-config
-    	this.coretask.writeWlanConf(values);
-    	
     	// updating lan-settings
     	String lanconfig = this.settings.getString("lannetworkpref", "192.168.2.0/24");
     	this.coretask.writeLanConf(lanconfig);
@@ -538,10 +491,7 @@ public class TetherApplication extends Application {
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
             	Log.d(MSG_TAG, "Checking for new clients ... ");
-            	// Notification-Type
-            	int notificationType = TetherApplication.this.getNotificationType();
-
-                // Checking leasefile
+            	// Checking leasefile
                 long currentTimestampLeaseFile = TetherApplication.this.coretask.getModifiedDate(TetherApplication.this.coretask.DATA_FILE_PATH + "/var/dnsmasq.leases");
                 if (this.timestampLeasefile != currentTimestampLeaseFile) {
                     try {
@@ -553,7 +503,6 @@ public class TetherApplication extends Application {
                             if (this.currentLeases.containsKey(lease) == false) {
                             	Log.d(MSG_TAG, "Removing '"+lease+"' from known-leases!");
                                 this.knownLeases.remove(lease);
-                            	TetherApplication.this.removeClientMac(lease);
                             }
                         }
                         
@@ -562,12 +511,7 @@ public class TetherApplication extends Application {
                             String mac = leases.nextElement();
                             Log.d(MSG_TAG, "Mac-Address: '"+mac+"' - Known Lease: "+knownLeases.contains(mac));
                         	// AddClientData to TetherApplication-Class for AccessControlActivity
-                        	ClientData clientData = this.currentLeases.get(mac);
-                        	TetherApplication.this.addClientData(clientData);
-                            if (notificationType == 2) {
-                                this.sendClientMessage(this.currentLeases.get(mac),
-                                		CLIENT_CONNECT_AUTHORIZED);
-                            }
+                            this.sendClientMessage(this.currentLeases.get(mac), CLIENT_CONNECT_AUTHORIZED);
                         }
                         this.timestampLeasefile = currentTimestampLeaseFile;
                     } catch (Exception e) {
@@ -589,7 +533,6 @@ public class TetherApplication extends Application {
             m.what = connectType;
             TetherApplication.this.clientConnectHandler.sendMessage(m);
         }
-
     }
    	
    	public void trafficCounterEnable(boolean enable) {
