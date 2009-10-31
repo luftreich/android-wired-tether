@@ -9,25 +9,6 @@
 		android:layout_height="40dp"
 		android:layout_gravity="center_horizontal"
 		android:background="#A0909090">
-        <!-- <ImageView android:id="@+id/radioModeImage"
- 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-			android:layout_marginTop="10px"
-			android:layout_marginRight="10px"
-			android:gravity="center"
-			android:layout_toRightOf="@+id/radioModeLabel"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentTop="true"/>
-		<TextView android:id="@+id/radioModeText"
- 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"           
-            android:text=""
-			android:layout_marginTop="10px"
-			android:layout_marginRight="10px"
-			android:gravity="right"
-			android:textStyle="bold"
-			android:layout_toLeftOf="@+id/radioModeImage"
-            android:textColor="#ffffff" /> -->
 	</RelativeLayout>
     <RelativeLayout android:id="@+id/layoutDownloadUpdate"
 		android:layout_width="fill_parent"
@@ -87,15 +68,15 @@
 					<TableRow>
 						<ImageView android:id="@+id/startTetherBtn"
 							android:src="@drawable/start" 
- 		    				android:layout_width="120px"
-		    				android:layout_height="140px"
+ 		    				android:layout_width="115px"
+		    				android:layout_height="230px"
 							android:layout_gravity="center_horizontal" />
 					</TableRow>
 					<TableRow>
 						<TextView android:id="@+id/startText"
 							android:text=" - Press to start tethering. - "
 							android:layout_gravity="center_vertical"
-							android:paddingTop="10px"
+							android:paddingTop="5px"
 							android:textStyle="bold"
 							android:textColor="#FF616161"
 							android:shadowColor = "#FFFFFFFF"
@@ -113,14 +94,14 @@
 					<TableRow>
 						<ImageView android:id="@+id/stopTetherBtn"
 							android:src="@drawable/stop" 
- 		    				android:layout_width="120px"
-		    				android:layout_height="140px"
+ 		    				android:layout_width="115px"
+		    				android:layout_height="230px"
 							android:layout_gravity="center_horizontal" />			
 					</TableRow>
 					<TableRow>
 						<TextView android:id="@+id/stopText"
 							android:text=" - Press to stop tethering. - "
-							android:paddingTop="10px"
+							android:paddingTop="5px"
 							android:layout_gravity="center_vertical"
 							android:textStyle="bold"
 							android:textColor="#FF616161"

@@ -125,7 +125,7 @@ public class TetherApplication extends Application {
 		
         // init notificationManager
         this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-    	this.notification = new Notification(android.R.drawable.button_onoff_indicator_on, "Wired Tether", System.currentTimeMillis());
+    	this.notification = new Notification(R.drawable.start_notification, "Wired Tether", System.currentTimeMillis());
     	this.mainIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
 	}
 
