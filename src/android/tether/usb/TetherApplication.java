@@ -277,12 +277,8 @@ public class TetherApplication extends Application {
     	this.notificationManager.notify(-1, this.notification);
     }
     
-    int clientConnectCount = 0;
     Handler clientConnectHandler = new Handler() {
  	   public void handleMessage(Message msg) {
- 		   
- 		   TetherApplication.this.clientConnectCount++;
- 		   TetherApplication.this.displayToastMessage("clientConnec ==> "+TetherApplication.this.clientConnectCount);
  		   ClientData clientData = (ClientData)msg.obj;
  		   if (TetherApplication.this.connectedMac == null || TetherApplication.this.connectedMac.equals(clientData.getMacAddress()) == false) {
  			   TetherApplication.this.connectedMac = clientData.getMacAddress();
