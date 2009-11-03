@@ -1,0 +1,11 @@
+#summary Frequently Asked Questions
+
+*Why do I get the message "Unsupported Kernel" on startup?*
+
+This means that the Linux kernel on your device does not have the features (CONFIG_NETFILTER/CONFIG_IP_NF_IPTABLES and/or RNDIS) required for tethering. If you have an ADP G1, please read (or [ADP16KernelUpdate] if you're using Donut), otherwise you will need to find a firmware/kernel with these features. The developers of Wired Tether are unable to help with other types of devices (but donations of hardware/etc would help ;)
+
+
+*Where can I find patches for that RNDIS-kernel feature? I want to compile my own kernel!*
+
+Zinx Verituse has ported the essential parts from the official HTC Hero kernel.
+Patches can be extracted from [http://github.com/cyanogen/cm-kernel/commit/9fd56ebdb6aba91e9b17ddea490ec9b39a819112 here] and [http://github.com/cyanogen/cm-kernel/commit/1a57339f015c3bfa097cf1d3e82f3485a6652483 here].
