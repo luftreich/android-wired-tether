@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.zip.GZIPInputStream;
 
@@ -35,7 +34,7 @@ public class CoreTask {
 	
 	public String DATA_FILE_PATH;
 	
-	private static final String FILESET_VERSION = "1";
+	private static final String FILESET_VERSION = "2";
 	private static final String defaultDNS1 = "208.67.220.220";
 	
 	private Hashtable<String,String> runningProcesses = new Hashtable<String,String>();
@@ -311,45 +310,7 @@ public class CoreTask {
     	}
     	return outdated;
     }
-    
-    public Hashtable<String,String> getWlanConf() {
-    	Hashtable<String,String> wlanConf = new Hashtable<String,String>();
-    	ArrayList<String> lines = readLinesFromFile(this.DATA_FILE_PATH+"/conf/wifi.conf");
-    	for (String line : lines) {
-    		String[] pair = line.split("=");
-    		if (pair[0] != null && pair[1] != null && pair[0].length() > 0 && pair[1].length() > 0) {
-    			wlanConf.put(pair[0].trim(), pair[1].trim());
-    		}
-    	}
-    	return wlanConf;
-    }
  
-    public synchronized boolean writeWlanConf(String name, String value) {
-    	Hashtable<String, String> table = new Hashtable<String, String>();
-    	table.put(name, value);
-    	return writeWlanConf(table);
-    }
-    
-    public synchronized boolean writeWlanConf(Hashtable<String,String> values) {
-    	String filename = this.DATA_FILE_PATH+"/conf/wifi.conf";
-    	ArrayList<String> valueNames = Collections.list(values.keys());
-
-    	String fileString = "";
-    	
-    	ArrayList<String> inputLines = readLinesFromFile(filename);
-    	for (String line : inputLines) {
-    		for (String name : valueNames) {
-        		if (line.contains(name)){
-	    			line = name+"="+values.get(name);
-	    			break;
-	    		}
-    		}
-    		line+="\n";
-    		fileString += line;
-    	}
-    	return writeLinesToFile(filename, fileString); 	
-    }
-    
     public long getModifiedDate(String filename) {
     	File file = new File(filename);
     	if (file.exists() == false) {
@@ -359,12 +320,12 @@ public class CoreTask {
     }
     
     public String getLanIPConf() {
-    	String returnString = "192.168.2.0/24";
+    	String returnString = "172.20.23.252/30";
     	String filename = this.DATA_FILE_PATH+"/conf/lan_network.conf";
     	ArrayList<String> inputLines = readLinesFromFile(filename);
     	for (String line : inputLines) {
     		if (line.startsWith("network")) {
-    			returnString = (line.split("=")[1])+"/24";
+    			returnString = (line.split("=")[1])+"/30";
     			break;
     		}
     	}
@@ -383,11 +344,11 @@ public class CoreTask {
     	String gateway = lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".254";
     	
     	// Assemble dnsmasq dhcp-range
-    	String iprange = lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".100,"+lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".105,12h";
+    	String iprange = lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".253,"+lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".253,12h";
     	
     	// Update bin/tether
     	filename = this.DATA_FILE_PATH+"/conf/lan_network.conf";
-       	fileString = "network="+lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".0\n";
+       	fileString = "network="+lanparts[0]+"."+lanparts[1]+"."+lanparts[2]+".252\n";
        	fileString += "gateway="+gateway;
 
     	writesuccess = writeLinesToFile(filename, fileString);

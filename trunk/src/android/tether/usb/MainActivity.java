@@ -143,7 +143,11 @@ public class MainActivity extends Activity {
 	        
 	        // Open config-recovery-dialog	        
 	        if (filesetoutdated) {
-	        	this.openConfigRecoverDialog();
+	        	/*
+	        	 * TODO
+	        	 * Disabled for now
+	        	 */
+	        	//this.openConfigRecoverDialog();
 	        }
 	        // Open donate-dialog
 			this.openDonateDialog();

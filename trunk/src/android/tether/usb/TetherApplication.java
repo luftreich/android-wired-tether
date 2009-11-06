@@ -285,7 +285,7 @@ public class TetherApplication extends Application {
     
     public void recoverConfig() {
     	// updating lan-settings
-    	String lanconfig = this.settings.getString("lannetworkpref", "192.168.2.0/24");
+    	String lanconfig = this.settings.getString("lannetworkpref", "172.20.23.252/30");
     	this.coretask.writeLanConf(lanconfig);
     	
     	this.displayToastMessage("Configuration recovered.");
@@ -354,6 +354,12 @@ public class TetherApplication extends Application {
 				}				
 				if (message == null) {
 			    	message = "Binaries and config-files installed!";
+				}
+				
+				// Removing ols lan-config-file
+				File lanConfFile = new File(TetherApplication.this.coretask.DATA_FILE_PATH+"/conf/lan_network.conf");
+				if (lanConfFile.exists()) {
+					lanConfFile.delete();
 				}
 				
 				// Sending message

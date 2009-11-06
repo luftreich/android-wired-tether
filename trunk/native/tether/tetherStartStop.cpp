@@ -124,7 +124,7 @@ void startint() {
 	writelog(system("echo 1 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface enabled");
 	
 	char command[100];
-	sprintf(command, "ifconfig usb0 %s netmask 255.255.255.0", GATEWAY);
+	sprintf(command, "ifconfig usb0 %s netmask 255.255.255.252", GATEWAY);
 	int returncode = system(command);
 	if (returncode == 0) {
 		returncode = system("ifconfig usb0 up");
@@ -161,14 +161,14 @@ void startipt() {
 		returncode = system("/data/data/android.tether.usb/bin/iptables -I FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT");
 	}
 	if (returncode == 0) {
-		sprintf(command, "/data/data/android.tether.usb/bin/iptables -I FORWARD -s %s/24 -j ACCEPT", NETWORK);
+		sprintf(command, "/data/data/android.tether.usb/bin/iptables -I FORWARD -s %s/30 -j ACCEPT", NETWORK);
 		returncode = system(command);
 	}
 	if (returncode == 0) {
 		returncode = system("/data/data/android.tether.usb/bin/iptables -P FORWARD DROP");
 	}
 	if (returncode == 0) {
-		sprintf(command, "/data/data/android.tether.usb/bin/iptables -t nat -I POSTROUTING -s %s/24 -j MASQUERADE", NETWORK);
+		sprintf(command, "/data/data/android.tether.usb/bin/iptables -t nat -I POSTROUTING -s %s/30 -j MASQUERADE", NETWORK);
 		returncode = system(command);
 	}
 	writelog(returncode,(char *)"Setting up firewall rules");
@@ -222,8 +222,8 @@ void readlanconfig() {
 		}
 	}
 	else {
-		sprintf(NETWORK,"192.168.2.0");
-		sprintf(GATEWAY,"192.168.2.254");
+		sprintf(NETWORK,"172.20.23.252");
+		sprintf(GATEWAY,"172.20.23.254");
 	}
 }
 
