@@ -324,6 +324,13 @@ public class TetherApplication extends Application {
         	super.handleMessage(msg);
         }
     };
+  
+    public void renewLibrary() {
+    	File libNativeTaskFile = new File(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/.libNativeTask.so");
+    	if (libNativeTaskFile.exists()){
+    		libNativeTaskFile.renameTo(new File(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/libNativeTask.so"));
+    	}
+    }   
     
     public void installFiles() {
     	new Thread(new Runnable(){
@@ -331,7 +338,13 @@ public class TetherApplication extends Application {
 				String message = null;
 				// libnativeTask.so	
 				if (message == null) {
-					message = TetherApplication.this.copyBinary(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/libNativeTask.so", R.raw.libnativetask_so);
+					File libNativeTaskFile = new File(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/libNativeTask.so");
+					if (libNativeTaskFile.exists()) {
+						message = TetherApplication.this.copyBinary(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/.libNativeTask.so", R.raw.libnativetask_so);
+					}
+					else {
+						message = TetherApplication.this.copyBinary(TetherApplication.this.coretask.DATA_FILE_PATH+"/library/libNativeTask.so", R.raw.libnativetask_so);
+					}
 				}
 				// tether
 		    	if (message == null) {
