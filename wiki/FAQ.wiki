@@ -4,6 +4,10 @@
 
 This means that the Linux kernel on your device does not have the features (CONFIG_NETFILTER/CONFIG_IP_NF_IPTABLES and/or RNDIS) required for tethering. If you have an ADP G1, please read (or [ADP16KernelUpdate] if you're using Donut), otherwise you will need to find a firmware/kernel with these features. The developers of Wired Tether are unable to help with other types of devices (but donations of hardware/etc would help ;)
 
+*My operating system is asking me for drivers?*
+
+This program has been tested with Linux and Microsoft Windows clients. The client needs to support RNDIS. Windows Vista/7 comes with *[http://www.microsoft.com/whdc/device/network/ndis/rmndis.mspx RDNIS]*-support out of the box. Windows XP requires to download and install a driver. I recommend using the *[http://www.htc.com/hero/m/files/downloads/HTCsync.zip HTC Sync]* (for the HTC Hero) which contains the required driver. The driver is located under C:\Program Files\HTC\HTC Driver\Driver Files\XP_x86 in case it's not automatically installed when plugging in.
+
 
 *Where can I find patches for that RNDIS-kernel feature? I want to compile my own kernel!*
 
