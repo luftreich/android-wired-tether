@@ -55,8 +55,11 @@ public class TetherApplication extends Application {
 	private static final int CLIENT_CONNECT_AUTHORIZED = 1;
 	
 	// Data counters
-	private Thread TrafficCounterThread = null;
+	private Thread trafficCounterThread = null;
 
+	// DNS-Server-Update Thread
+	private Thread dnsUpdateThread = null;
+	
 	// WifiManager
 	public String tetherNetworkDevice = "";
 	
@@ -148,22 +151,16 @@ public class TetherApplication extends Application {
         }*/
     	// Reset Client-Connect-Mac
     	this.connectedMac = null;
-    	
-        // Updating dnsmasq-Config
-        this.coretask.updateDnsmasqConf();        
+        
+        // Update resolv.conf-file
+        String dns[] = this.coretask.updateResolvConf();
         
     	// Starting service
         if (this.coretask.runRootCommand(this.coretask.DATA_FILE_PATH+"/bin/tether start")) {
-    		// Starting client-Connect-Thread	
-        	if (this.clientConnectThread != null) {
-        		try {
-        			this.clientConnectThread.interrupt();
-        		} catch (Exception ex) {;}
-        		this.clientConnectThread = null;
-        	}
+        	
+        	this.clientConnectEnable(true);
     		this.trafficCounterEnable(true);
-        	this.clientConnectThread = new Thread(new ClientConnect());
-            this.clientConnectThread.start(); 
+    		this.dnsUpdateEnable(dns, true);
         	
 			// Acquire Wakelock
 			this.acquireWakeLock();
@@ -175,17 +172,11 @@ public class TetherApplication extends Application {
     
     public boolean stopTether() {
     	this.releaseWakeLock();
-    	if (this.clientConnectThread != null) {
-    		try {
-    			this.clientConnectThread.interrupt();
-    		} catch (Exception ex) {;}
-    		this.clientConnectThread = null;
-    	}
+    	this.clientConnectEnable(false);
     	boolean stopped = this.coretask.runRootCommand(this.coretask.DATA_FILE_PATH+"/bin/tether stop");
-    	
 		this.notificationManager.cancelAll();
-
 		this.trafficCounterEnable(false);
+		this.dnsUpdateEnable(false);
 		return stopped;
     }
 	
@@ -202,21 +193,14 @@ public class TetherApplication extends Application {
     	boolean stopped = false;
     	command = this.coretask.DATA_FILE_PATH+"/bin/tether stop";
 		stopped = this.coretask.runRootCommand(command);    	
-    	if (this.clientConnectThread != null) {
-    		try {
-    			this.clientConnectThread.interrupt();
-    		} catch (Exception ex) {;}
-    		this.clientConnectThread = null;
-    	}
+    	this.clientConnectEnable(false);
     	if (stopped != true) {
     		Log.d(MSG_TAG, "Couldn't stop tethering.");
     		return false;
     	}
     	command = this.coretask.DATA_FILE_PATH+"/bin/tether start";
     	if (this.coretask.runRootCommand(command)) {
-    		// Starting client-Connect-Thread
-    		this.clientConnectThread = new Thread(new ClientConnect());
-            this.clientConnectThread.start(); 
+    		this.clientConnectEnable(true);
     	}
     	else {
     		Log.d(MSG_TAG, "Couldn't stop tethering.");
@@ -267,10 +251,6 @@ public class TetherApplication extends Application {
 			Log.d(MSG_TAG, "Ups ... an exception happend while trying to acquire WakeLock - Here is what I know: "+ex.getMessage());
 		}
 	}
-    
-    public int getNotificationType() {
-		return Integer.parseInt(this.settings.getString("notificationpref", "2"));
-    }
     
     // Notification
     public void showStartNotification() {
@@ -491,6 +471,18 @@ public class TetherApplication extends Application {
         return version;
     }
     
+   	public void clientConnectEnable(boolean enable) {
+   		if (enable == true) {
+			if (this.clientConnectThread == null || this.clientConnectThread.isAlive() == false) {
+				this.clientConnectThread = new Thread(new ClientConnect());
+				this.clientConnectThread.start();
+			}
+   		} else {
+	    	if (this.clientConnectThread != null)
+	    		this.clientConnectThread.interrupt();
+   		}
+   	}
+
     
     class ClientConnect implements Runnable {
 
@@ -498,7 +490,7 @@ public class TetherApplication extends Application {
         private Hashtable<String, ClientData> currentLeases = new Hashtable<String, ClientData>();
         private long timestampLeasefile = -1;
 
-        // @Override
+        @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
             	Log.d(MSG_TAG, "Checking for new clients ... ");
@@ -546,17 +538,78 @@ public class TetherApplication extends Application {
         }
     }
    	
-   	public void trafficCounterEnable(boolean enable) {
-		// Traffic counter
+    public void dnsUpdateEnable(boolean enable) {
+    	this.dnsUpdateEnable(null, enable);
+    }
+ 
+    /*
+    public void dnsUpdateEnable(String[] dns, boolean enable) {
+    	if (enable) {
+        	if (this.dnsUpdateThread != null) {
+        		try {
+        			this.dnsUpdateThread.interrupt();
+        		} catch (Exception ex) {;}
+        		this.dnsUpdateThread = null;
+        	}
+        	this.dnsUpdateThread = new Thread(new DnsUpdate(dns));
+            this.dnsUpdateThread.start(); 
+    	}
+    	else {
+        	if (this.dnsUpdateThread != null) {
+        		try {
+        			this.dnsUpdateThread.interrupt();
+        		} catch (Exception ex) {;}
+        		this.dnsUpdateThread = null;
+        	}
+    	}
+    }*/
+ 
+   	public void dnsUpdateEnable(String[] dns, boolean enable) {
    		if (enable == true) {
-			if (this.TrafficCounterThread == null || this.TrafficCounterThread.isAlive() == false) {
-				this.TrafficCounterThread = new Thread(new TrafficCounter());
-				this.TrafficCounterThread.start();
+			if (this.dnsUpdateThread == null || this.dnsUpdateThread.isAlive() == false) {
+				this.dnsUpdateThread = new Thread(new DnsUpdate(dns));
+				this.dnsUpdateThread.start();
 			}
    		} else {
-			// Traffic counter
-	    	if (this.TrafficCounterThread != null)
-	    		this.TrafficCounterThread.interrupt();
+	    	if (this.dnsUpdateThread != null)
+	    		this.dnsUpdateThread.interrupt();
+   		}
+   	}
+       
+    class DnsUpdate implements Runnable {
+
+    	String[] dns;
+    	
+    	public DnsUpdate(String[] dns) {
+    		this.dns = dns;
+    	}
+    	
+		@Override
+		public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+            	String[] currentDns = TetherApplication.this.coretask.getCurrentDns();
+            	if (this.dns == null || this.dns[0].equals(currentDns[0]) == false || this.dns[1].equals(currentDns[1]) == false) {
+            		this.dns = TetherApplication.this.coretask.updateResolvConf();
+            	}
+            }
+            // Taking a nap
+   			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+    }
+   	
+   	public void trafficCounterEnable(boolean enable) {
+   		if (enable == true) {
+			if (this.trafficCounterThread == null || this.trafficCounterThread.isAlive() == false) {
+				this.trafficCounterThread = new Thread(new TrafficCounter());
+				this.trafficCounterThread.start();
+			}
+   		} else {
+	    	if (this.trafficCounterThread != null)
+	    		this.trafficCounterThread.interrupt();
    		}
    	}
    	
@@ -565,6 +618,8 @@ public class TetherApplication extends Application {
    		long previousDownload;
    		long previousUpload;
    		long lastTimeChecked;
+   		
+   		@Override
    		public void run() {
    			this.previousDownload = this.previousUpload = 0;
    			this.lastTimeChecked = new Date().getTime();

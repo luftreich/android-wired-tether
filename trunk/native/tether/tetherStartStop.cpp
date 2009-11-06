@@ -197,7 +197,7 @@ void stopdnsmasq() {
 
 void startdnsmasq() {
     // Starting dnsmasq
-	writelog(system("/data/data/android.tether.usb/bin/dnsmasq --conf-file=/data/data/android.tether.usb/conf/dnsmasq.conf"),(char*)"Starting dnsmasq");
+	writelog(system("/data/data/android.tether.usb/bin/dnsmasq --resolv-file=/data/data/android.tether.usb/conf/resolv.conf --conf-file=/data/data/android.tether.usb/conf/dnsmasq.conf"),(char*)"Starting dnsmasq");
 }
 
 void readlanconfig() {
