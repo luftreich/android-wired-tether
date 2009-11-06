@@ -7,14 +7,14 @@
     <string name="installtext">(Re)-Install binaries/configs</string>
 	<string name="paypalUrl">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=9328763</string>
     <string-array name="lannetworkvalues">  
-		<item>192.168.1.0/24</item>  
-		<item>192.168.2.0/24</item> 
-		<item>192.168.3.0/24</item> 
-		<item>172.20.21.0/24</item>  
-		<item>172.20.22.0/24</item>
-		<item>172.20.23.0/24</item>   
-		<item>10.10.1.0/24</item>  
-		<item>10.10.2.0/24</item>  
-		<item>10.10.3.0/24</item> 
+		<item>192.168.1.252/30</item>  
+		<item>192.168.2.252/30</item> 
+		<item>192.168.3.252/30</item> 
+		<item>172.20.21.252/30</item>  
+		<item>172.20.22.252/30</item>
+		<item>172.20.23.252/30</item>   
+		<item>10.10.1.252/30</item>  
+		<item>10.10.2.252/30</item>  
+		<item>10.10.3.252/30</item> 
 	</string-array>  	  
 </resources>
