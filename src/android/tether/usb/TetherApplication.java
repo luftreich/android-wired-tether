@@ -548,28 +548,6 @@ public class TetherApplication extends Application {
     	this.dnsUpdateEnable(null, enable);
     }
  
-    /*
-    public void dnsUpdateEnable(String[] dns, boolean enable) {
-    	if (enable) {
-        	if (this.dnsUpdateThread != null) {
-        		try {
-        			this.dnsUpdateThread.interrupt();
-        		} catch (Exception ex) {;}
-        		this.dnsUpdateThread = null;
-        	}
-        	this.dnsUpdateThread = new Thread(new DnsUpdate(dns));
-            this.dnsUpdateThread.start(); 
-    	}
-    	else {
-        	if (this.dnsUpdateThread != null) {
-        		try {
-        			this.dnsUpdateThread.interrupt();
-        		} catch (Exception ex) {;}
-        		this.dnsUpdateThread = null;
-        	}
-    	}
-    }*/
- 
    	public void dnsUpdateEnable(String[] dns, boolean enable) {
    		if (enable == true) {
 			if (this.dnsUpdateThread == null || this.dnsUpdateThread.isAlive() == false) {
