@@ -197,8 +197,10 @@ public class CoreTask {
     	boolean rooted = true;
 		try {
 			File su = new File("/system/bin/su");
-			if (su.exists() == false) {
-				rooted = false;
+			if (!su.exists()) {
+				su = new File("/system/xbin/su");
+				if (!su.exists())
+					rooted = false;
 			}
 		} catch (Exception e) {
 			Log.d(MSG_TAG, "Can't obtain root - Here is what I know: "+e.getMessage());
