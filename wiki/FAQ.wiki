@@ -2,7 +2,11 @@
 
 *Which devices are supported?*
 
-This app has been tested on the ADP1 (T-Mobile G1). A modified kernel including all needed modifications to enable usb-tethering is available *[http://code.google.com/p/android-wired-tether/downloads/list?q=Kernel here]*. A tutorial on how to replace the kernel on the ADP1 (running Android 1.6/Donut) can be found [http://code.google.com/p/android-wifi-tether/wiki/ADP16KernelUpdate here] - make sure to apply usbtether-kernel! 
+This app has been tested on the ADP1 (T-Mobile G1) and Google Nexus One. 
+
+For the ADP1: A modified kernel including all needed modifications to enable usb-tethering is available *[http://code.google.com/p/android-wired-tether/downloads/list?q=Kernel here]*. A tutorial on how to replace the kernel on the ADP1 (running Android 1.6/Donut) can be found [http://code.google.com/p/android-wifi-tether/wiki/ADP16KernelUpdate here] - make sure to apply usbtether-kernel! 
+
+For the Nexus One: A kernel upodate is available *[http://code.google.com/p/android-wired-tether/downloads/list here]*. Please see below for instructions.
 
 *Why do I get the message "Unsupported Kernel" on startup?*
 
@@ -17,3 +21,17 @@ This program has been tested with Linux and Microsoft Windows clients. The clien
 
 Zinx Verituse has ported the essential parts from the official HTC Hero kernel.
 Patches can be extracted from [http://github.com/cyanogen/cm-kernel/commit/9fd56ebdb6aba91e9b17ddea490ec9b39a819112 here] and [http://github.com/cyanogen/cm-kernel/commit/1a57339f015c3bfa097cf1d3e82f3485a6652483 here].
+
+*How do I update the kernel on the Nexus One?*
+
+  # You must be running the userdebug or eng build. This update won't run on the 'user' build.
+  # Download the update from the 'Downloads' page above.
+  # Rename it to 'update.zip' and copy it to the top directory of your phone's SD card.
+  # Power off your phone.
+  # Turn it on *whilst holding the trackball down*
+  # At the boot screen, use the volume keys to select 'bootloader' then press the power button to select.
+  # At the next screen, select 'recovery' and press the power button to select it.
+  # The boot 'cross' will appear, and shortly after a '!' graphic will appear. Hold down the power button, the press 'volume up'.
+  # You will see a menu with blue text. Use the trackball to highlight and select 'apply SD card update'
+  # The process should take a few seconds, after which you can reboot your phone.
+  # You now have a tether-enabled kernel.
