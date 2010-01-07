@@ -6,7 +6,7 @@ This app has been tested on the ADP1 (T-Mobile G1) and Google Nexus One.
 
 For the ADP1: A modified kernel including all needed modifications to enable usb-tethering is available *[http://code.google.com/p/android-wired-tether/downloads/list?q=Kernel here]*. A tutorial on how to replace the kernel on the ADP1 (running Android 1.6/Donut) can be found [http://code.google.com/p/android-wifi-tether/wiki/ADP16KernelUpdate here] - make sure to apply usbtether-kernel! 
 
-For the Nexus One: A kernel upodate is available *[http://code.google.com/p/android-wired-tether/downloads/list here]*. Please see below for instructions.
+For the Nexus One: Please see below for instructions.
 
 *Why do I get the message "Unsupported Kernel" on startup?*
 
