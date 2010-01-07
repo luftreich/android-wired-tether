@@ -24,14 +24,4 @@ Patches can be extracted from [http://github.com/cyanogen/cm-kernel/commit/9fd56
 
 *How do I update the kernel on the Nexus One?*
 
-  # You must be running the userdebug or eng build. This update won't run on the 'user' build.
-  # Download the update from the 'Downloads' page above.
-  # Rename it to 'update.zip' and copy it to the top directory of your phone's SD card.
-  # Power off your phone.
-  # Turn it on *whilst holding the trackball down*
-  # At the boot screen, use the volume keys to select 'bootloader' then press the power button to select.
-  # At the next screen, select 'recovery' and press the power button to select it.
-  # The boot 'cross' will appear, and shortly after a '!' graphic will appear. Hold down the power button, the press 'volume up'.
-  # You will see a menu with blue text. Use the trackball to highlight and select 'apply SD card update'
-  # The process should take a few seconds, after which you can reboot your phone.
-  # You now have a tether-enabled kernel.
+Please see the instructions on the [http://code.google.com/p/android-wifi-tether/wiki/NexusOneKernelUpdate Wireless Tether Wiki]. Yes, the kernel you download there will work.
