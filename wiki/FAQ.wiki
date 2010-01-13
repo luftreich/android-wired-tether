@@ -20,7 +20,7 @@ This program has been tested with Linux and Microsoft Windows clients. The clien
 *Where can I find patches for that RNDIS-kernel feature? I want to compile my own kernel!*
 
 Zinx Verituse has ported the essential parts from the official HTC Hero kernel.
-Patches can be extracted from [http://github.com/cyanogen/cm-kernel/commit/9fd56ebdb6aba91e9b17ddea490ec9b39a819112 here] and [http://github.com/cyanogen/cm-kernel/commit/1a57339f015c3bfa097cf1d3e82f3485a6652483 here].
+Patches can be extracted from [http://github.com/cyanogen/cm-kernel/commit/91588ab04d1466bfc85a3d0fe48adc3c68034fd3 here] and [http://github.com/cyanogen/cm-kernel/commit/d01c8caf593c0dc4f73e1b5f8d5dd789559e0976 here].
 
 *How do I update the kernel on the Nexus One?*
 
