@@ -12,6 +12,7 @@
 
 package android.tether.usb;
 
+import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -218,11 +219,11 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	boolean supRetVal = super.onCreateOptionsMenu(menu);
     	SubMenu setup = menu.addSubMenu(0, MENU_SETUP, 0, getString(R.string.setuptext));
-    	setup.setIcon(R.drawable.setup);
+    	setup.setIcon(drawable.ic_menu_preferences);
     	SubMenu log = menu.addSubMenu(0, MENU_LOG, 0, getString(R.string.logtext));
-    	log.setIcon(R.drawable.log);
+    	log.setIcon(drawable.ic_menu_agenda);
     	SubMenu about = menu.addSubMenu(0, MENU_ABOUT, 0, getString(R.string.abouttext));
-    	about.setIcon(R.drawable.about);    	
+    	about.setIcon(drawable.ic_menu_info_details);      	
     	return supRetVal;
     }
     
@@ -388,7 +389,6 @@ public class MainActivity extends Activity {
         View view = li.inflate(R.layout.unsupportedkernelview, null); 
 		new AlertDialog.Builder(MainActivity.this)
         .setTitle("Unsupported Kernel!")
-        .setIcon(R.drawable.warning)
         .setView(view)
         .setNegativeButton("Close", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -411,7 +411,6 @@ public class MainActivity extends Activity {
         View view = li.inflate(R.layout.norootview, null); 
 		new AlertDialog.Builder(MainActivity.this)
         .setTitle("Not Root!")
-        .setIcon(R.drawable.warning)
         .setView(view)
         .setNegativeButton("Close", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -435,7 +434,6 @@ public class MainActivity extends Activity {
         versionName.setText(this.application.getVersionName());        
 		new AlertDialog.Builder(MainActivity.this)
         .setTitle("About")
-        .setIcon(R.drawable.about)
         .setView(view)
         .setNeutralButton("Donate", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -462,7 +460,6 @@ public class MainActivity extends Activity {
 	        View view = li.inflate(R.layout.donateview, null); 
 	        new AlertDialog.Builder(MainActivity.this)
 	        .setTitle("Donate")
-	        .setIcon(R.drawable.about)
 	        .setView(view)
 	        .setNeutralButton("Close", new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int whichButton) {
@@ -486,7 +483,6 @@ public class MainActivity extends Activity {
         View view = li.inflate(R.layout.recoverconfigview, null); 
 		new AlertDialog.Builder(MainActivity.this)
         .setTitle("Recover Settings?")
-        .setIcon(R.drawable.warning)
         .setView(view)
         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -507,7 +503,6 @@ public class MainActivity extends Activity {
         View view = li.inflate(R.layout.updateview, null); 
 		new AlertDialog.Builder(MainActivity.this)
         .setTitle("Update Application?")
-        .setIcon(R.drawable.download)
         .setView(view)
         .setNeutralButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
