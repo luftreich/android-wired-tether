@@ -12,6 +12,7 @@
 
 package android.tether.usb;
 
+import android.R.drawable;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -180,7 +181,7 @@ public class SetupActivity extends PreferenceActivity implements OnSharedPrefere
     public boolean onCreateOptionsMenu(Menu menu) {
     	boolean supRetVal = super.onCreateOptionsMenu(menu);
     	SubMenu installBinaries = menu.addSubMenu(0, 0, 0, getString(R.string.installtext));
-    	installBinaries.setIcon(R.drawable.install);
+    	installBinaries.setIcon(drawable.ic_menu_set_as);
     	return supRetVal;
     }    
     
