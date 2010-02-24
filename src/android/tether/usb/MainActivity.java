@@ -12,6 +12,8 @@
 
 package android.tether.usb;
 
+import java.io.File;
+
 import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -122,34 +124,28 @@ public class MainActivity extends Activity {
 	        this.application.startupCheckPerformed = true;
 	        
 	        // Only check up to '=' to allow for either 'y' or 'm'
-	    	if (!this.application.coretask.hasKernelFeature("CONFIG_NETFILTER=") || 
-	    		!this.application.coretask.hasKernelFeature("CONFIG_IP_NF_IPTABLES=") ||
-	    		!this.application.coretask.hasKernelFeature("CONFIG_USB_FUNCTION_ETHER="))
+	    	boolean unsupportedKernel = false;
+	        if (!(new File("/proc/net/netfilter")).exists()) {
+	        	unsupportedKernel = true;
+	    	}
+	        if (!(new File("/sys/devices/virtual/net/usb0/enable")).exists() && !(new File("/sys/devices/virtual/usb_composite/rndis/enable")).exists()) {
+	        	unsupportedKernel = true;
+	        }
+	        if (unsupportedKernel)
 	    		this.openUnsupportedKernelDialog();
-	    	if (!this.application.coretask.hasRootPermission())
+	        
+	        if (!this.application.coretask.hasRootPermission())
 	    		this.openNotRootDialog();
 	    	
         	// Checking root-permission, files
-	        boolean filesetoutdated = false;
 	        if (this.application.binariesExists() == false || this.application.coretask.filesetOutdated()) {
 	        	if (this.application.coretask.hasRootPermission()) {
-	        		if (this.application.coretask.filesetOutdated()) {
-	        			filesetoutdated = true;
-	        		}
 	        		this.application.installFiles();
 	        	}
 	        }
 	        // Check if native-library needs to be moved
 	        this.application.renewLibrary();
-	        
-	        // Open config-recovery-dialog	        
-	        if (filesetoutdated) {
-	        	/*
-	        	 * TODO
-	        	 * Disabled for now
-	        	 */
-	        	//this.openConfigRecoverDialog();
-	        }
+
 	        // Open donate-dialog
 			this.openDonateDialog();
         
@@ -464,7 +460,6 @@ public class MainActivity extends Activity {
 	        .setNeutralButton("Close", new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int whichButton) {
 	                        Log.d(MSG_TAG, "Close pressed");
-	                        MainActivity.this.application.displayToastMessage("Thanks, anyway ...");
 	                }
 	        })
 	        .setNegativeButton("Donate", new DialogInterface.OnClickListener() {
