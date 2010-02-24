@@ -116,13 +116,26 @@ char* chomp (char* s) {
 void stopint() {
 	// Shutting usb network interface
 	writelog(system("ifconfig usb0 down"),(char *)"Shutting down network interface");
-	writelog(system("echo 0 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface disabled");
+	// Kernel 2.6.29
+    if (file_exists((char*)"/sys/devices/virtual/net/usb0/enable") == 0) {
+		writelog(system("echo 0 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface disabled");
+	}
+	// Kernel 2.6.32
+	if (file_exists((char*)"/sys/devices/virtual/usb_composite/rndis/enable") == 0) {
+		writelog(system("echo 0 > /sys/devices/virtual/usb_composite/rndis/enable"),(char *)"USB interface disabled");
+	}
 }
 
 void startint() {
     // Configuring network interface
-	writelog(system("echo 1 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface enabled");
-	
+    // Kernel 2.6.29
+    if (file_exists((char*)"/sys/devices/virtual/net/usb0/enable") == 0) {
+		writelog(system("echo 1 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface enabled");
+	}
+	// Kernel 2.6.32
+	if (file_exists((char*)"/sys/devices/virtual/usb_composite/rndis/enable") == 0) {
+		writelog(system("echo 1 > /sys/devices/virtual/usb_composite/rndis/enable"),(char *)"USB interface enabled");
+	}
 	char command[100];
 	sprintf(command, "ifconfig usb0 %s netmask 255.255.255.252", GATEWAY);
 	int returncode = system(command);
