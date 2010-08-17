@@ -115,7 +115,7 @@ char* chomp (char* s) {
 
 void stopint() {
 	// Shutting usb network interface
-	writelog(system("ifconfig usb0 down"),(char *)"Shutting down network interface");
+	writelog(system("/data/data/android.tether.usb/bin/ifconfig usb0 down"),(char *)"Shutting down network interface");
 	// Kernel 2.6.29
     if (file_exists((char*)"/sys/devices/virtual/net/usb0/enable") == 0) {
 		writelog(system("echo 0 > /sys/devices/virtual/net/usb0/enable"),(char *)"USB interface disabled");
@@ -124,6 +124,9 @@ void stopint() {
 	if (file_exists((char*)"/sys/devices/virtual/usb_composite/rndis/enable") == 0) {
 		writelog(system("echo 0 > /sys/devices/virtual/usb_composite/rndis/enable"),(char *)"USB interface disabled");
 	}
+	if (file_exists((char*)"/sys/devices/platform/msm_hsusb/usb_function_switch") == 0) {
+		writelog(system("echo 3 > /sys/devices/platform/msm_hsusb/usb_function_switch"),(char *)"USB interface disabled");
+	}	
 }
 
 void startint() {
@@ -136,11 +139,14 @@ void startint() {
 	if (file_exists((char*)"/sys/devices/virtual/usb_composite/rndis/enable") == 0) {
 		writelog(system("echo 1 > /sys/devices/virtual/usb_composite/rndis/enable"),(char *)"USB interface enabled");
 	}
+	if (file_exists((char*)"/sys/devices/platform/msm_hsusb/usb_function_switch") == 0) {
+		writelog(system("echo 4 > /sys/devices/platform/msm_hsusb/usb_function_switch"),(char *)"USB interface enabled");
+	}	
 	char command[100];
-	sprintf(command, "ifconfig usb0 %s netmask 255.255.255.252", GATEWAY);
+	sprintf(command, "/data/data/android.tether.usb/bin/ifconfig usb0 %s netmask 255.255.255.252", GATEWAY);
 	int returncode = system(command);
 	if (returncode == 0) {
-		returncode = system("ifconfig usb0 up");
+		returncode = system("/data/data/android.tether.usb/bin/ifconfig usb0 up");
 	}
 	writelog(returncode,(char *)"Configuring network interface");
 }
