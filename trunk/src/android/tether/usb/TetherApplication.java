@@ -338,6 +338,10 @@ public class TetherApplication extends Application {
 		    	if (message == null) {
 			    	message = TetherApplication.this.copyBinary(TetherApplication.this.coretask.DATA_FILE_PATH+"/bin/dnsmasq", R.raw.dnsmasq);
 		    	}
+		    	// ifconfig
+		    	if (message == null) {
+			    	message = TetherApplication.this.copyBinary(TetherApplication.this.coretask.DATA_FILE_PATH+"/bin/ifconfig", R.raw.ifconfig);
+		    	}		    	
 				try {
 		    		TetherApplication.this.coretask.chmodBin();
 				} catch (Exception e) {
