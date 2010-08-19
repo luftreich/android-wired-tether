@@ -128,7 +128,7 @@ public class MainActivity extends Activity {
 	        if (!(new File("/proc/net/netfilter")).exists()) {
 	        	unsupportedKernel = true;
 	    	}
-	        if (!(new File("/sys/devices/virtual/net/usb0/enable")).exists() && !(new File("/sys/devices/virtual/usb_composite/rndis/enable")).exists()) {
+	        if (!(new File("/sys/devices/virtual/net/usb0/enable")).exists() && !(new File("/sys/devices/virtual/usb_composite/rndis/enable")).exists() && !(new File("/sys/devices/platform/msm_hsusb/usb_function_switch")).exists()) {
 	        	unsupportedKernel = true;
 	        }
 	        if (unsupportedKernel)
@@ -143,8 +143,6 @@ public class MainActivity extends Activity {
 	        		this.application.installFiles();
 	        	}
 	        }
-	        // Check if native-library needs to be moved
-	        this.application.renewLibrary();
 
 	        // Open donate-dialog
 			this.openDonateDialog();
@@ -473,26 +471,6 @@ public class MainActivity extends Activity {
    		}
    	}
    	
-   	private void openConfigRecoverDialog() {
-		LayoutInflater li = LayoutInflater.from(this);
-        View view = li.inflate(R.layout.recoverconfigview, null); 
-		new AlertDialog.Builder(MainActivity.this)
-        .setTitle("Recover Settings?")
-        .setView(view)
-        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	Log.d(MSG_TAG, "No pressed");
-                }
-        })
-        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Log.d(MSG_TAG, "Yes pressed");
-                    MainActivity.this.application.recoverConfig();
-                }
-        })
-        .show();
-   	}
-
    	public void openUpdateDialog(final String downloadFileUrl, final String fileName) {
 		LayoutInflater li = LayoutInflater.from(this);
         View view = li.inflate(R.layout.updateview, null); 
