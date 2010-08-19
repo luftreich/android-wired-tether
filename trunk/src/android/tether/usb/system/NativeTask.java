@@ -8,11 +8,11 @@ public class NativeTask {
 	
 	static {
         try {
-            Log.i(MSG_TAG, "Trying to load libNativeTask.so");
-            System.load("/data/data/android.tether.usb/library/libNativeTask.so");
+        	Log.i(MSG_TAG, "Trying to load libnativetask.so");
+            System.loadLibrary("nativetask");
         }
         catch (UnsatisfiedLinkError ule) {
-            Log.e(MSG_TAG, "Could not load libNativeTask.so");
+        	Log.e(MSG_TAG, "Could not load libnativetask.so");
         }
     }
     public static native String getProp(String name);
